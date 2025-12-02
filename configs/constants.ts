@@ -1,0 +1,1 @@
+export const CMI_TOKEN = 'cmi_token'; 

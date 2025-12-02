@@ -1,148 +1,157 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, AuthFormValues } from "@/schemas";
+import userStore from "@/stores/UserStore";
+import { useRouter } from "next/navigation";
+import { CMI_TOKEN } from "@/configs/constants";
+import useCookie from "@/hooks/useCookie";
+import { Loader2, MessageCircle, Star, BarChart3, Handshake } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import illustration from "@/public/illustration.svg";
+import { toast } from "react-toastify";
 
 const LoginContainer = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { setCookie } = useCookie();
+
   const form = useForm<AuthFormValues>({
     resolver: zodResolver(authSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = (values: AuthFormValues) => {
+  const onSubmit = async (values: AuthFormValues) => {
     try {
-      console.log("Login values:", values);
-    } catch (error) {
-      console.error(error);
+      setLoading(true);
+      const resp = await userStore.Login(values.email, values.password);
+
+      if (resp.success) {
+        userStore.setUser(resp.data.user);
+        setCookie(CMI_TOKEN, resp.data.token);
+        toast.success("Logged in successfully");
+        router.replace("/cmi/dashboard");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 font-inter relative">
+    <div className="min-h-screen w-full flex items-center justify-center bg-white">
+      {/* Outer container */}
+      <div className="w-full container mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
 
-      {/* LEFT PANEL — Trust Hive Branding */}
-      <div className="relative hidden md:flex items-center justify-center bg-primary overflow-hidden">
+        {/* LEFT - Logo + Login Form */}
+        <div className="max-w-sm w-full mx-auto flex flex-col">
 
-        {/* Soft gradient lights */}
-        <div className="absolute w-[450px] h-[450px] bg-white/10 blur-3xl rounded-full -top-10 -left-10" />
-        <div className="absolute w-[380px] h-[380px] bg-white/5 blur-3xl rounded-full bottom-10 -right-10" />
-
-        {/* Noise overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.1] mix-blend-overlay pointer-events-none"
-          style={{
-            backgroundImage:
-              "url('https://grainy-gradients.vercel.app/noise.svg')",
-          }}
-        />
-
-        {/* Trust Hive text */}
-        <div className="relative text-center text-white px-8">
-          <h1 className="text-5xl font-extrabold font-black-han-sans drop-shadow-xl">
-            Trust Hive
-          </h1>
-          <p className="mt-4 text-lg text-white/80">
-            Secure. Reliable. Seamless experience.
-          </p>
-        </div>
-      </div>
-
-      {/* RIGHT PANEL — Clean & Flat (NO CARD) */}
-      <div className="relative flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 py-16">
-
-        {/* Soft background wash */}
-        <div className="absolute inset-0 pointer-events-none bg-linear-to-b from-white via-white to-gray-50" />
-
-        {/* floating soft lights */}
-        <div className="absolute w-56 h-56 bg-primary/10 blur-3xl rounded-full -top-4 right-6 hidden sm:block" />
-        <div className="absolute w-48 h-48 bg-primary/5 blur-3xl rounded-full bottom-6 -left-6 hidden sm:block" />
-
-        <div className="relative w-full max-w-md mx-auto">
-
-          {/* Mobile Header */}
-          <div className="md:hidden text-center mb-12">
-            <h1 className="text-[42px] font-extrabold text-primary font-black-han-sans leading-tight">
+          {/* Logo Above Title */}
+          <div className="mb-6">
+            <h1 className="text-3xl font-black-han-sans font-extrabold text-primary drop-shadow-sm">
               Trust Hive
             </h1>
-            <p className="text-gray-600 mt-2">
-              Secure. Reliable. Seamless experience.
-            </p>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-2">
-            Welcome back
+          <h2 className="text-2xl font-bold text-primary">
+            Sign in to your account
           </h2>
-          <p className="text-gray-500 mb-10 text-sm md:text-base">
-            Login to continue your seamless experience.
+
+          <p className="text-gray-500 text-sm mt-1 mb-6">
+            Access your dashboard and manage your customer reviews.
           </p>
 
-          {/* FORM */}
-          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+          <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
 
             {/* Email */}
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Email</label>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium">Email</label>
               <input
                 {...form.register("email")}
                 type="email"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-                  focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition"
-                placeholder="you@example.com"
+                placeholder="jane.doe@you.com"
+                className="w-full mt-1 px-4 py-2.5 border border-gray-300 rounded-md text-[15px]
+              focus:ring-2 focus:ring-primary/40 outline-none"
               />
-              {form.formState.errors.email?.message && (
-                <p className="text-red-600 text-sm animate-fadeIn">
-                  {form.formState.errors.email.message}
-                </p>
-              )}
             </div>
 
             {/* Password */}
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Password</label>
+            <div>
+              <label className="block text-gray-700 text-sm font-medium">Password</label>
               <input
                 {...form.register("password")}
                 type="password"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl 
-                  focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition"
-                placeholder="••••••••"
+                placeholder="********"
+                className="w-full mt-1 px-4 py-2.5 border border-gray-300 rounded-md text-[15px]
+              focus:ring-2 focus:ring-primary/40 outline-none"
               />
-              {form.formState.errors.password?.message && (
-                <p className="text-red-600 text-sm animate-fadeIn">
-                  {form.formState.errors.password.message}
-                </p>
-              )}
             </div>
 
-            {/* Forgot password */}
-            <div className="text-right">
-              <button
-                type="button"
-                className="text-primary text-sm font-medium hover:underline"
-              >
-                Forgot password?
-              </button>
+            <div className="flex justify-between items-center">
+              <label className="flex items-center gap-2 text-gray-700 text-sm">
+                <input type="checkbox" className="rounded border-gray-300" />
+                Remember me
+              </label>
+
             </div>
 
-            {/* Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-primary text-white rounded-xl font-semibold shadow-md 
-                hover:bg-primary/90 transition-all active:scale-[0.98]"
+              disabled={loading}
+              className="w-full py-2.5 bg-primary text-white rounded-md font-semibold hover:bg-primary/90 cursor-pointer transition flex items-center justify-center"
             >
-              Login
+              {loading ? <Loader2 className="animate-spin" /> : "Sign in"}
             </button>
 
+            <p className="text-center text-sm text-gray-600">
+              Don’t have an account?
+              <Link href="/cmi/register" className="text-primary hover:underline font-medium ml-1">
+                Sign up
+              </Link>
+            </p>
+
           </form>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="max-w-md hidden mx-auto md:flex flex-col justify-center">
+
+          <h2 className="text-xl font-semibold text-primary mb-4 leading-snug">
+            Trusted by businesses for reliable review collection
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <Feature icon={MessageCircle} text="Collect verified customer reviews" />
+            <Feature icon={Star} text="Build trust & brand credibility" />
+            <Feature icon={BarChart3} text="Analytics & sentiment scoring" />
+            <Feature icon={Handshake} text="AI-powered insights & automation" />
+          </div>
+
+          <div className="flex justify-start">
+            <Image
+              src={illustration}
+              alt="illustration"
+              className="w-[350px] max-w-full"
+            />
+          </div>
 
         </div>
+
       </div>
     </div>
   );
+
 };
+
+const Feature = ({ icon: Icon, text }: { icon: any; text: string }) => (
+  <div className="flex items-start gap-3">
+    <div className="w-10 h-10 rounded-full bg-[#F2F6FA] flex items-center justify-center">
+      <Icon size={20} className="text-primary]" />
+    </div>
+    <p className="text-gray-700 text-[15px]">{text}</p>
+  </div>
+);
 
 export default LoginContainer;

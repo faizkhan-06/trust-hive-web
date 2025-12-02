@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Black_Han_Sans, Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,6 +31,19 @@ export default function RootLayout({
         className={`${inter.variable} ${blackHanSans.variable} antialiased`}
       >
         {children}
+
+        <ToastContainer
+          position='top-right'
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='colored'
+        />
       </body>
     </html>
   );

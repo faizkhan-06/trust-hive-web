@@ -1,27 +1,45 @@
 "use client"
 
-import { AuthFormValues, authSchema } from '@/schemas';
-import React from 'react';
+import { RegisterFormValues, registerAuthSchema } from '@/schemas';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ChevronsUpDown, Loader2 } from 'lucide-react';
+import userStore from '@/stores/UserStore';
+import { CMI_TOKEN } from '@/configs/constants';
+import useCookie from '@/hooks/useCookie';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const RegisterContainer = () => {
 
-  const form = useForm<AuthFormValues>({
-    resolver: zodResolver(authSchema),
+  const [loading, setLoading] = useState<boolean>(false);
+  const { setCookie } = useCookie();
+  const router = useRouter();
+
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerAuthSchema),
     defaultValues: {
       email: "",
       password: ""
     }
   });
 
-  const onSubmit = (values: AuthFormValues) => {
+  const onSubmit = async (values: RegisterFormValues) => {
     try {
-      console.log("values", values)
-    } catch (error) {
-      console.error(error);
+      setLoading(true);
+      const resp = await userStore.Register(values.email, values.password, values.businessName, values.businessType);
+
+      if (resp.success) {
+        userStore.setUser(resp.data.user);
+        setCookie(CMI_TOKEN, resp.data.token);
+        toast.success("Registerd successfully");
+        router.replace("/cmi/dashboard");
+      }
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 font-inter">
@@ -48,8 +66,7 @@ const RegisterContainer = () => {
             Trust Hive
           </h1>
           <p className="mt-4 text-lg text-white/80 font-medium">
-            Secure. Reliable. Seamless experience.
-          </p>
+            Your trusted platform for customer insights.          </p>
         </div>
       </div>
 
@@ -80,7 +97,7 @@ const RegisterContainer = () => {
             Create your account
           </h2>
           <p className="text-gray-500 mb-10 text-sm md:text-base">
-            Join today and start your seamless experience.
+            Join Trust Hive to collect genuine customer reviews.
           </p>
 
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
@@ -109,7 +126,7 @@ const RegisterContainer = () => {
                 {...form.register("password")}
                 type="password"
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary transition outline-none"
-                placeholder="••••••••"
+                placeholder="********"
               />
               {
                 form.formState.errors.password?.message && (
@@ -120,13 +137,121 @@ const RegisterContainer = () => {
               }
             </div>
 
+            <div className="flex flex-col gap-1">
+              <label className="text-gray-700 font-medium">Business Name</label>
+              <input
+                {...form.register("businessName")}
+                type="text"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary transition outline-none"
+                placeholder="What is your business called?"
+              />
+              {
+                form.formState.errors.password?.message && (
+                  <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
+                    {form.formState.errors.businessName?.message}
+                  </p>
+                )
+              }
+            </div>
+
+            {/* Business Type */}
+            <div className="flex flex-col gap-1">
+              <label className="text-gray-700 font-medium">Business Type</label>
+
+              <div className="relative">
+                <select
+                  {...form.register("businessType")}
+                  className="
+        w-full appearance-none px-4 py-3 
+        bg-gray-50 border border-gray-200 
+        rounded-xl shadow-sm 
+        focus:ring-2 focus:ring-primary/30 
+        focus:border-primary 
+        transition-all outline-none
+        text-gray-800 font-medium
+        hover:bg-gray-100
+      "
+                >
+                  <option value="" disabled className="text-gray-400 bg-white">
+                    Select business type
+                  </option>
+
+                  <option value="Restaurant" className="bg-white text-gray-800 font-medium">
+                    🍽️ Restaurant
+                  </option>
+
+                  <option value="Retail Store" className="bg-white text-gray-800 font-medium">
+                    🏪 Retail Store
+                  </option>
+
+                  <option value="Service Provider" className="bg-white text-gray-800 font-medium">
+                    🛠️ Service Provider
+                  </option>
+
+                  <option value="E-Commerce" className="bg-white text-gray-800 font-medium">
+                    🛒 E-Commerce
+                  </option>
+
+                  <option value="Healthcare" className="bg-white text-gray-800 font-medium">
+                    🏥 Healthcare
+                  </option>
+
+                  <option value="Education" className="bg-white text-gray-800 font-medium">
+                    🎓 Education
+                  </option>
+
+                  <option value="Real Estate" className="bg-white text-gray-800 font-medium">
+                    🏡 Real Estate
+                  </option>
+
+                  <option value="Automotive" className="bg-white text-gray-800 font-medium">
+                    🚗 Automotive
+                  </option>
+
+                  <option value="Other" className="bg-white text-gray-800 font-medium">
+                    ⭐ Other
+                  </option>
+
+                </select>
+
+                {/* Icon */}
+                <ChevronsUpDown
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                  size={18}
+                />
+              </div>
+
+              {form.formState.errors.businessType?.message && (
+                <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
+                  {form.formState.errors.businessType.message}
+                </p>
+              )}
+            </div>
+
+
             {/* Button */}
             <button
               type="submit"
-              className="w-full py-3 bg-primary text-white rounded-xl font-semibold shadow-md hover:shadow-lg hover:bg-primary/90 transition-all active:scale-[0.98]"
+              className="w-full py-2.5 bg-primary text-white rounded-md font-semibold hover:bg-primary/90 cursor-pointer transition flex items-center justify-center"
             >
-              Create Account
+              {loading ? <Loader2 className=' animate-spin' /> : "Create Account"} 
             </button>
+
+
+
+
+            {/* Login Redirect */}
+            <div className="text-center pt-2">
+              <p className="text-gray-600 text-sm">
+                Already have an account?{" "}
+                <a
+                  href="/cmi/login"
+                  className="text-primary font-semibold hover:underline hover:text-primary/80 transition"
+                >
+                  Login
+                </a>
+              </p>
+            </div>
 
           </form>
         </div>
