@@ -36,3 +36,12 @@ export interface IReview {
   reviewer_name: string;
   created_at: Date;
 }
+
+
+export interface IApiReviewData {
+  reviews: IReview[];
+  total: number; 
+  page: number;
+  limit: number;
+  totalPages: number; 
+}
