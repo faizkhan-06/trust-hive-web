@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import QRCode from "react-qr-code";
-import { Download, Copy, QrCode } from "lucide-react";
+import { Download, Copy, QrCode, Star } from "lucide-react";
 import userStore from "@/stores/UserStore";
 import * as htmlToImage from "html-to-image";
 
@@ -21,10 +21,9 @@ const ShareContainer = () => {
 
     try {
       const dataUrl = await htmlToImage.toPng(qrPosterRef.current, {
-        quality: 1.0,
-        pixelRatio: 3, // SUPER SHARP PNG
-        canvasWidth: qrPosterRef.current.clientWidth * 3,
-        canvasHeight: qrPosterRef.current.clientHeight * 3,
+        cacheBust: true,
+        pixelRatio: 2, // stable high quality
+        backgroundColor: "#0f0f0f", // prevents transparency crash
       });
 
       const link = document.createElement("a");
@@ -38,105 +37,125 @@ const ShareContainer = () => {
 
 
   return (
-    <div className="h-full w-full px-3 py-6 space-y-8">
+    <div className="h-full w-full px-4 py-8 space-y-10 bg-gradient-to-br from-black via-[#0f0f0f] to-black text-white">
 
       {/* Header */}
-      <div className="space-y-1">
-        <h2 className="text-3xl tracking-tight font-bold text-gray-900">
+      <div className="space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">
           Share & Collect Reviews
         </h2>
-        <p className="text-gray-500 text-sm">
-          Choose a method to share your review page and start collecting feedback.
+        <p className="text-white/60 text-sm">
+          Share your review page and start collecting feedback instantly.
         </p>
       </div>
 
       {/* QR Share Section */}
-      <div className="bg-white rounded-2xl shadow-sm p-8 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div className="rounded-3xl p-8 backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative overflow-hidden">
 
-        {/* Left */}
-        <div className="space-y-4">
-          <h3 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
-            <QrCode className="w-6 h-6 text-primary" />
-            Share with a QR Code
+        {/* Glow Effect */}
+        <div className="absolute -top-24 -right-24 w-72 h-72 bg-primary/30 rounded-full blur-3xl opacity-30" />
+
+        {/* Left Content */}
+        <div className="space-y-5 relative z-10">
+          <h3 className="text-2xl font-semibold flex items-center gap-3">
+            <QrCode className="w-6 h-6 text-white" />
+            Share with QR Code
           </h3>
 
-          <p className="text-gray-500 text-sm leading-relaxed">
-            Display this QR code on posters, counters, or receipts for customers
-            to easily leave a review.
+          <p className="text-white/60 text-sm leading-relaxed">
+            Print this QR code on posters, counters, or receipts so customers
+            can instantly leave a review.
           </p>
 
           <button
             onClick={handleDownload}
-            className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl
-      text-sm font-medium hover:bg-primary/90 transition shadow-sm"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl
+          text-sm font-medium hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/40"
           >
             <Download className="w-4 h-4" />
             Download QR Poster
           </button>
         </div>
 
-        {/* Right — QR Preview */}
-        <div className="flex justify-center md:justify-end">
-          <div
-            ref={qrPosterRef}
-            className="w-[200px] rounded-2xl bg-white shadow-lg border border-gray-200 overflow-hidden flex flex-col"
-          >
-            {/* Header strip */}
-            <div className="bg-primary text-white py-3 px-4 text-center">
-              <h3 className="text-lg font-semibold tracking-wide truncate">
-                {userStore.user?.business.name} 
-              </h3>
-              <p className="text-white/80 text-[11px] mt-0.5 truncate">
-                {userStore.user?.business.type}
-              </p>
-            </div>
+        {/* Right — QR Glass Poster */}
+{/* Right — QR Poster */}
+<div
+  ref={qrPosterRef}
+  className="w-[360px] aspect-square rounded-3xl 
+  bg-gradient-to-br from-[#111] via-[#161616] to-[#0f0f0f]
+  border border-white/10 
+  shadow-2xl 
+  p-6 flex flex-col"
+>
 
-            {/* Body */}
-            <div className="p-5 flex flex-col items-center">
-              <p className="text-gray-600 text-xs mb-3 tracking-wide">
-                Scan to leave a review
-              </p>
+  {/* Top Section */}
+  <div className="text-center space-y-2">
+    <h3 className="text-xl font-semibold truncate">
+      {userStore.user?.business.name}
+    </h3>
 
-              <div className="bg-gray-50 p-3 rounded-xl shadow-inner border border-gray-200">
-                <QRCode value={reviewURL} size={120} />
-              </div>
+    <div className="w-14 h-0.5 mx-auto bg-linear-to-r from-transparent via-gray-800 to-transparent rounded-full" />
 
-              <div className="mt-3 flex items-center gap-0.5 justify-center">
-                {Array(5).fill(0).map((_, i) => (
-                  <span key={i} className="text-primary text-lg">★</span>
-                ))}
-              </div>
+    <p className="text-white/50 text-xs uppercase tracking-widest">
+      {userStore.user?.business.type}
+    </p>
+  </div>
 
-              <p className="text-[10px] text-gray-500 mt-1">
-                Trusted by your customers
-              </p>
-            </div>
+  {/* Middle Section (Flexible Area) */}
+  <div className="flex-1 flex flex-col items-center justify-center space-y-4 py-4">
 
-            {/* Footer */}
-            <div className="bg-gray-100 py-2 text-center">
-              <p className="text-[10px] text-gray-500 tracking-wide">
-                powered by <span className="font-semibold text-primary font-black-han-sans">TrustHive</span>
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="bg-white p-4 rounded-2xl shadow-xl">
+      <QRCode value={reviewURL} size={170} />
+    </div>
+
+    <p className="text-xs text-white/60 tracking-wide">
+      Scan to leave a review
+    </p>
+
+    <div className="flex gap-1">
+      {[...Array(5)].map((_, i) => (
+        <span key={i} className="text-secondary text-sm">
+          <Star fill="#7c3aed" />
+        </span>
+      ))}
+    </div>
+
+  </div>
+
+  {/* Footer (Always Visible) */}
+  <div className="pt-4 border-t border-white/10 text-center space-y-2">
+    <p className="text-[10px] text-white/40 uppercase tracking-[0.2em]">
+      Powered by
+    </p>
+
+    <img
+      src="/assets/logo.svg"
+      alt="TrustHive"
+      className="h-6 mx-auto object-contain"
+    />
+  </div>
+</div>
+
+
       </div>
 
-
       {/* Link Share Section */}
-      <div className="bg-white rounded-2xl shadow-sm p-6 space-y-3">
-        <h3 className="text-xl font-semibold text-gray-900">Share Your Public Link</h3>
-        <p className="text-gray-500 text-sm">
-          Share via email, social media, or messaging apps.
+      <div className="rounded-3xl p-6 backdrop-blur-xl bg-white/5 border border-white/10 shadow-xl space-y-4">
+
+        <h3 className="text-xl font-semibold">Share Public Link</h3>
+
+        <p className="text-white/60 text-sm">
+          Send this link via email, WhatsApp, or social media.
         </p>
 
-        <div className="flex items-center gap-2 mt-4">
-          <div className="flex-1 bg-gray-100 px-4 py-3 rounded-xl text-gray-800 text-sm font-mono border border-gray-200 shadow-inner overflow-hidden">
+        <div className="flex items-center gap-3 mt-4">
+          <div className="flex-1 bg-black/40 px-4 py-3 rounded-xl text-white text-sm font-mono border border-white/10 overflow-hidden">
             {reviewURL}
           </div>
+
           <button
             onClick={handleCopy}
-            className="bg-gray-200 hover:bg-gray-300 transition px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2"
+            className="bg-white/10 hover:bg-white/20 transition px-5 py-3 rounded-xl text-sm font-medium flex items-center gap-2"
           >
             <Copy className="w-4 h-4" />
             Copy
@@ -145,6 +164,7 @@ const ShareContainer = () => {
       </div>
     </div>
   );
+
 };
 
 export default ShareContainer;

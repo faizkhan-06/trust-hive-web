@@ -18,13 +18,19 @@ const Sidebar: React.FC<ISidebarProps> = ({ logo, name, links, businessName }) =
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden flex items-center justify-between p-4 shadow-md bg-primary text-white z-30 relative font-inter">
-        <div className="flex items-center gap-2">
-          {logo && <img src={logo} alt="logo" className="w-8 h-8 rounded-md" />}
-          <span className="font-black-han-sans text-white text-2xl text-center">
-            {name}
-          </span>
-        </div>
+      <div className="lg:hidden flex items-center justify-between p-4 
+  bg-gradient-to-r from-black via-[#7c3aed] to-black 
+  text-white backdrop-blur-xl border-b border-white/10 z-30 relative">
+
+    <div className="flex justify-center items-center">
+      {logo && (
+        <img
+          src={logo}
+          alt="logo"
+          className="w-32 max-w-full object-contain drop-shadow-2xl"
+        />
+      )}
+    </div>
         <button onClick={() => setOpen(true)}>
           <Menu className="w-7 h-7 text-white" />
         </button>
@@ -40,32 +46,30 @@ const Sidebar: React.FC<ISidebarProps> = ({ logo, name, links, businessName }) =
 
       {/* Sidebar */}
       <aside
-        className={`font-inter fixed top-0 left-0 h-full w-64 bg-primary text-white shadow-lg z-50 transition-transform duration-300
-          ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
+        className={`
+    fixed top-0 left-0 h-full w-64 
+    bg-gradient-to-b from-black via-[#0f0f0f] to-black
+    backdrop-blur-xl border-r border-white/10
+    text-white shadow-2xl z-50 transition-transform duration-300
+    ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+  `}
       >
+        {/* Glow Accent */}
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-[#7c3aed]/30 rounded-full blur-3xl opacity-40" />
+
         {/* Header */}
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-2">
-            {logo && <img src={logo} alt="logo" className="w-10 h-10 rounded-md" />}
-            <div className="flex flex-col">
-              <span className="font-black-han-sans text-white text-2xl">
-                {name}
-              </span>
+    <div className="flex justify-center items-center pt-4">
+      {logo && (
+        <img
+          src={logo}
+          alt="logo"
+          className="w-40 max-w-full object-contain drop-shadow-2xl"
+        />
+      )}
+    </div>
 
-              {businessName && (
-                <span className="text-white/80 text-sm font-light -mt-1 truncate overflow-hidden whitespace-nowrap">
-                  {businessName}
-                </span>
-              )}
-            </div>
-          </div>
-          <button onClick={() => setOpen(false)} className="lg:hidden">
-            <X className="w-6 h-6 text-white" />
-          </button>
-        </div>
-
-        {/* Nav Links */}
-        <nav className="mt-4 px-2 space-y-1">
+        {/* Navigation */}
+        <nav className="relative mt-6 px-3 space-y-2">
           {links.map((item, idx) => {
             const isActive = pathname === item.href;
 
@@ -74,22 +78,26 @@ const Sidebar: React.FC<ISidebarProps> = ({ logo, name, links, businessName }) =
                 key={idx}
                 href={item.href}
                 className={`
-                  flex items-center gap-3 p-3 rounded-xl transition
-                  ${isActive
-                    ? "bg-white text-primary font-semibold"
-                    : "text-white hover:bg-white/20"
+            group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+            ${isActive
+                    ? "bg-[#7c3aed] text-white shadow-lg shadow-[#7c3aed]/40"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                   }
-                `}
+          `}
               >
                 <span
-                  className={isActive ? "text-primary" : "text-white"}
+                  className={`
+              transition-all duration-300
+              ${isActive
+                      ? "text-white"
+                      : "text-white/60 group-hover:text-white"
+                    }
+            `}
                 >
                   {item.icon}
                 </span>
-                <span
-                  className={`text-sm font-medium ${isActive ? "text-primary" : "text-white"
-                    }`}
-                >
+
+                <span className="text-sm font-medium tracking-wide">
                   {item.label}
                 </span>
               </Link>
@@ -97,6 +105,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ logo, name, links, businessName }) =
           })}
         </nav>
       </aside>
+
     </>
   );
 };

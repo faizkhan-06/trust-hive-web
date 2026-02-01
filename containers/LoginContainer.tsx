@@ -13,6 +13,7 @@ import Link from "next/link";
 import Image from "next/image";
 import illustration from "@/public/illustration.svg";
 import { toast } from "react-toastify";
+import logo from "@/public/assets/logo.svg"
 
 const LoginContainer = () => {
   const [loading, setLoading] = useState(false);
@@ -41,73 +42,100 @@ const LoginContainer = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-white">
-      {/* Outer container */}
-      <div className="w-full container mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div className="min-h-screen bg-black grid grid-cols-1 md:grid-cols-2 text-white">
 
-        {/* LEFT - Logo + Login Form */}
-        <div className="max-w-sm w-full mx-auto flex flex-col">
+      {/* LEFT SIDE - Branding Panel */}
+      <div className="hidden md:flex relative items-center justify-center p-10">
 
-          {/* Logo Above Title */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-black-han-sans font-extrabold text-primary drop-shadow-sm">
-              Trust Hive
-            </h1>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#7c3aed] via-black to-black opacity-90" />
+
+        <div className="relative z-10 max-w-md">
+
+          <h1 className="text-4xl font-bold mb-6">
+            Welcome Back 👋
+          </h1>
+
+          <p className="text-white/70 mb-8">
+            Log in to manage your QR codes, monitor reviews, and track your business reputation in one powerful dashboard.
+          </p>
+
+          <div className="space-y-4 text-white/80 text-sm">
+            <p>✔ Access all customer reviews</p>
+            <p>✔ Monitor ratings in real-time</p>
+            <p>✔ Manage your business insights</p>
           </div>
 
-          <h2 className="text-2xl font-bold text-primary">
-            Sign in to your account
+        </div>
+      </div>
+
+
+      {/* RIGHT SIDE - Login Form */}
+      <div className="flex items-center justify-center px-6 sm:px-12">
+
+        <div className="w-full max-w-md">
+
+          {/* Logo */}
+          <div className="flex items-center justify-center md:justify-start mb-8">
+            <Image
+              src={logo}
+              alt="Trust Hive"
+              className="h-10 w-auto object-contain"
+              priority
+            />
+          </div>
+
+          <h2 className="text-3xl font-semibold mb-2">
+            Sign In
           </h2>
 
-          <p className="text-gray-500 text-sm mt-1 mb-6">
-            Access your dashboard and manage your customer reviews.
+          <p className="text-white/60 mb-8">
+            Enter your credentials to access your dashboard.
           </p>
 
           <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
 
             {/* Email */}
             <div>
-              <label className="block text-gray-700 text-sm font-medium">Email</label>
+              <label className="text-sm text-white/70">Email</label>
               <input
                 {...form.register("email")}
                 type="email"
-                placeholder="jane.doe@you.com"
-                className="w-full mt-1 px-4 py-2.5 border border-gray-300 rounded-md text-[15px]
-              focus:ring-2 focus:ring-primary/40 outline-none"
+                placeholder="you@example.com"
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-gray-700 text-sm font-medium">Password</label>
+              <label className="text-sm text-white/70">Password</label>
               <input
                 {...form.register("password")}
                 type="password"
-                placeholder="********"
-                className="w-full mt-1 px-4 py-2.5 border border-gray-300 rounded-md text-[15px]
-              focus:ring-2 focus:ring-primary/40 outline-none"
+                placeholder="Enter your password"
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
-            <div className="flex justify-between items-center">
-              <label className="flex items-center gap-2 text-gray-700 text-sm">
-                <input type="checkbox" className="rounded border-gray-300" />
+            {/* Remember */}
+            <div className="flex items-center justify-between text-sm text-white/60">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="rounded border-white/20 bg-white/5" />
                 Remember me
               </label>
-
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-primary text-white rounded-md font-semibold hover:bg-primary/90 cursor-pointer transition flex items-center justify-center"
+              className="w-full py-3 bg-white text-black rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center"
             >
-              {loading ? <Loader2 className="animate-spin" /> : "Sign in"}
+              {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
             </button>
 
-            <p className="text-center text-sm text-gray-600">
-              Don’t have an account?
-              <Link href="/cmi/register" className="text-primary hover:underline font-medium ml-1">
+            <p className="text-center text-sm text-white/60 mt-4">
+              Don’t have an account?{" "}
+              <Link href="/cmi/register" className="text-white underline">
                 Sign up
               </Link>
             </p>
@@ -115,33 +143,11 @@ const LoginContainer = () => {
           </form>
         </div>
 
-        {/* RIGHT SIDE */}
-        <div className="max-w-md hidden mx-auto md:flex flex-col justify-center">
-
-          <h2 className="text-xl font-semibold text-primary mb-4 leading-snug">
-            Trusted by businesses for reliable review collection
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <Feature icon={MessageCircle} text="Collect verified customer reviews" />
-            <Feature icon={Star} text="Build trust & brand credibility" />
-            <Feature icon={BarChart3} text="Analytics & sentiment scoring" />
-            <Feature icon={Handshake} text="AI-powered insights & automation" />
-          </div>
-
-          <div className="flex justify-start">
-            <Image
-              src={illustration}
-              alt="illustration"
-              className="w-[350px] max-w-full"
-            />
-          </div>
-
-        </div>
-
       </div>
+
     </div>
   );
+
 
 };
 

@@ -10,6 +10,8 @@ import { CMI_TOKEN } from '@/configs/constants';
 import useCookie from '@/hooks/useCookie';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import logo from "@/public/assets/logo.svg"
+import Image from 'next/image';
 
 const RegisterContainer = () => {
 
@@ -42,224 +44,219 @@ const RegisterContainer = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 font-inter">
+    <div className="min-h-screen bg-black grid grid-cols-1 md:grid-cols-2 text-white">
+      {/* LEFT SIDE */}
+      <div className="hidden md:flex items-center justify-center bg-black p-8">
 
-      {/* LEFT PANEL */}
-      <div className="relative hidden md:flex items-center justify-center bg-primary overflow-hidden">
+        <div className="relative w-full max-w-xl h-[85vh] rounded-3xl overflow-hidden shadow-2xl">
 
-        {/* Noise texture */}
-        <div
-          className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url('https://grainy-gradients.vercel.app/noise.svg')",
-          }}
-        />
+          {/* Gradient */}
+          <div className="absolute inset-0 bg-linear-to-b from-[#d8b4fe] via-[#7c3aed] to-black z-0" />
 
-        {/* Floating blurred shapes */}
-        <div className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl -top-20 -left-20 animate-[float_8s_ease-in-out_infinite]" />
-        <div className="absolute w-80 h-80 bg-white/5 rounded-full blur-3xl bottom-0 -right-10 animate-[float_10s_ease-in-out_infinite]" />
+          {/* Dark circular glow (behind content) */}
+          <div className="absolute bottom-[-20%] left-1/2 -translate-x-1/2 w-[120%] h-[100%] bg-black rounded-full blur-3xl opacity-80 z-10" />
 
-        {/* Center content */}
-        <div className="relative text-center text-white px-8">
-          <h1 className="text-5xl font-extrabold drop-shadow-xl font-black-han-sans">
-            Trust Hive
-          </h1>
-          <p className="mt-4 text-lg text-white/80 font-medium">
-            Your trusted platform for customer insights.          </p>
+          {/* Grain texture */}
+          <div
+            className="absolute inset-0 opacity-[0.06] mix-blend-overlay z-20"
+            style={{
+              backgroundImage:
+                "url('https://grainy-gradients.vercel.app/noise.svg')",
+            }}
+          />
+
+          {/* Content (always on top) */}
+          <div className="relative z-30 h-full flex flex-col justify-end text-center px-10 pb-16">
+
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <Image
+                src={logo}
+                alt="Trust Hive"
+                className="h-10 max-h-10 w-auto object-contain"
+                priority
+              />
+            </div>
+
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Get Started with Us
+            </h1>
+
+            <p className="text-white/70 mb-10 max-w-sm mx-auto">
+              Complete these easy steps to register your account.
+            </p>
+
+            <div className="w-full max-w-sm mx-auto space-y-4">
+
+              <div className="flex items-center gap-3 bg-white text-black rounded-xl px-4 py-3 shadow-xl">
+                <div className="w-6 h-6 flex items-center justify-center rounded-full bg-black text-white text-sm font-semibold">
+                  1
+                </div>
+                <span className="text-sm font-medium">
+                  Create your business account
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-xl px-4 py-3 text-white/80">
+                <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white/20 text-white text-sm">
+                  2
+                </div>
+                <span className="text-sm">
+                  Generate & share your QR code
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md rounded-xl px-4 py-3 text-white/80">
+                <div className="w-6 h-6 flex items-center justify-center rounded-full bg-white/20 text-white text-sm">
+                  3
+                </div>
+                <span className="text-sm">
+                  Monitor and manage reviews in your dashboard
+                </span>
+              </div>
+
+            </div>
+
+
+          </div>
         </div>
       </div>
 
-      {/* RIGHT PANEL */}
-      <div className="flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 bg-white relative overflow-hidden py-16 md:py-0">
-
-        {/* subtle gradient wash */}
-        <div className="absolute inset-0 bg-linear-to-b from-white via-white to-gray-50 pointer-events-none" />
-
-        {/* floating blurred lights */}
-        <div className="absolute w-64 h-64 bg-primary/10 blur-3xl rounded-full -top-10 right-5 hidden sm:block" />
-        <div className="absolute w-56 h-56 bg-primary/5 blur-3xl rounded-full bottom-5 -left-5 hidden sm:block" />
 
 
-        {/* Register content */}
-        <div className="relative w-full max-w-md mx-auto">
-          {/* Mobile Trust Hive Header */}
-          <div className="md:hidden mb-12 text-center px-4">
-            <h1 className="text-[42px] leading-tight font-extrabold text-primary font-black-han-sans tracking-tight">
-              Trust Hive
-            </h1>
-            <p className="mt-3 text-gray-700 text-base font-medium">
-              Secure. Reliable. Seamless experience.
-            </p>
+      {/* RIGHT SIDE */}
+      <div className="flex items-center md:justify-start justify-center px-6 sm:px-12 bg-black">
+
+        <div className="w-full max-w-md">
+
+          {/* Mobile Logo */}
+          <div className="flex md:hidden items-center justify-center mb-6">
+            <Image
+              src={logo}
+              alt="Trust Hive"
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-2">
-            Create your account
+          <h2 className="text-3xl font-semibold mb-2 text-center md:text-left">
+            Sign Up Account
           </h2>
-          <p className="text-gray-500 mb-10 text-sm md:text-base">
-            Join Trust Hive to collect genuine customer reviews.
+
+          <p className="text-white/60 mb-8">
+            Enter your business details to create your account.
           </p>
 
-          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+          <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
+
             {/* Email */}
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Email</label>
+            <div>
+              <label className="text-sm text-white/70">Email</label>
               <input
                 {...form.register("email")}
                 type="email"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary transition outline-none"
                 placeholder="you@example.com"
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              {
-                form.formState.errors.email?.message && (
-                  <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
-                    {form.formState.errors.email.message}
-                  </p>
-                )
-              }
+              {form.formState.errors.email && (
+                <p className="text-red-400 text-sm mt-1">
+                  {form.formState.errors.email.message}
+                </p>
+              )}
             </div>
 
             {/* Password */}
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Password</label>
+            <div>
+              <label className="text-sm text-white/70">Password</label>
               <input
                 {...form.register("password")}
                 type="password"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary transition outline-none"
-                placeholder="********"
+                placeholder="Enter your password"
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              {
-                form.formState.errors.password?.message && (
-                  <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
-                    {form.formState.errors.password.message}
-                  </p>
-                )
-              }
+              {form.formState.errors.password && (
+                <p className="text-red-400 text-sm mt-1">
+                  {form.formState.errors.password.message}
+                </p>
+              )}
             </div>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Business Name</label>
+            {/* Business Name */}
+            <div>
+              <label className="text-sm text-white/70">Business Name</label>
               <input
                 {...form.register("businessName")}
                 type="text"
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary transition outline-none"
-                placeholder="What is your business called?"
+                placeholder="Your business name"
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              {
-                form.formState.errors.password?.message && (
-                  <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
-                    {form.formState.errors.businessName?.message}
-                  </p>
-                )
-              }
+              {form.formState.errors.businessName && (
+                <p className="text-red-400 text-sm mt-1">
+                  {form.formState.errors.businessName.message}
+                </p>
+              )}
             </div>
 
             {/* Business Type */}
-            <div className="flex flex-col gap-1">
-              <label className="text-gray-700 font-medium">Business Type</label>
+            <div>
+              <label className="text-sm text-white/70">Business Type</label>
+              <select
+                {...form.register("businessType")}
+                className="w-full mt-2 px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+              >
+                <option value="" className="bg-black">
+                  Select business type
+                </option>
+                <option value="Restaurant" className="bg-black">
+                  Restaurant
+                </option>
+                <option value="Retail Store" className="bg-black">
+                  Retail Store
+                </option>
+                <option value="Service Provider" className="bg-black">
+                  Service Provider
+                </option>
+                <option value="E-Commerce" className="bg-black">
+                  E-Commerce
+                </option>
+                <option value="Other" className="bg-black">
+                  Other
+                </option>
+              </select>
 
-              <div className="relative">
-                <select
-                  {...form.register("businessType")}
-                  className="
-        w-full appearance-none px-4 py-3 
-        bg-gray-50 border border-gray-200 
-        rounded-xl shadow-sm 
-        focus:ring-2 focus:ring-primary/30 
-        focus:border-primary 
-        transition-all outline-none
-        text-gray-800 font-medium
-        hover:bg-gray-100
-      "
-                >
-                  <option value="" disabled className="text-gray-400 bg-white">
-                    Select business type
-                  </option>
-
-                  <option value="Restaurant" className="bg-white text-gray-800 font-medium">
-                    🍽️ Restaurant
-                  </option>
-
-                  <option value="Retail Store" className="bg-white text-gray-800 font-medium">
-                    🏪 Retail Store
-                  </option>
-
-                  <option value="Service Provider" className="bg-white text-gray-800 font-medium">
-                    🛠️ Service Provider
-                  </option>
-
-                  <option value="E-Commerce" className="bg-white text-gray-800 font-medium">
-                    🛒 E-Commerce
-                  </option>
-
-                  <option value="Healthcare" className="bg-white text-gray-800 font-medium">
-                    🏥 Healthcare
-                  </option>
-
-                  <option value="Education" className="bg-white text-gray-800 font-medium">
-                    🎓 Education
-                  </option>
-
-                  <option value="Real Estate" className="bg-white text-gray-800 font-medium">
-                    🏡 Real Estate
-                  </option>
-
-                  <option value="Automotive" className="bg-white text-gray-800 font-medium">
-                    🚗 Automotive
-                  </option>
-
-                  <option value="Other" className="bg-white text-gray-800 font-medium">
-                    ⭐ Other
-                  </option>
-
-                </select>
-
-                {/* Icon */}
-                <ChevronsUpDown
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                  size={18}
-                />
-              </div>
-
-              {form.formState.errors.businessType?.message && (
-                <p className="text-red-600 text-sm flex items-center gap-1 animate-fadeIn">
+              {form.formState.errors.businessType && (
+                <p className="text-red-400 text-sm mt-1">
                   {form.formState.errors.businessType.message}
                 </p>
               )}
             </div>
 
-
-            {/* Button */}
+            {/* Submit */}
             <button
               type="submit"
-              className="w-full py-2.5 bg-primary text-white rounded-md font-semibold hover:bg-primary/90 cursor-pointer transition flex items-center justify-center"
+              className="w-full py-3 bg-white text-black rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center"
             >
-              {loading ? <Loader2 className=' animate-spin' /> : "Create Account"} 
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Sign Up"
+              )}
             </button>
 
-
-
-
-            {/* Login Redirect */}
-            <div className="text-center pt-2">
-              <p className="text-gray-600 text-sm">
-                Already have an account?{" "}
-                <a
-                  href="/cmi/login"
-                  className="text-primary font-semibold hover:underline hover:text-primary/80 transition"
-                >
-                  Login
-                </a>
-              </p>
-            </div>
+            {/* Login */}
+            <p className="text-sm text-center text-white/60 mt-4">
+              Already have an account?{" "}
+              <a href="/cmi/login" className="text-white underline">
+                Log in
+              </a>
+            </p>
 
           </form>
         </div>
       </div>
 
-
     </div>
   );
+
 };
 
 export default RegisterContainer;

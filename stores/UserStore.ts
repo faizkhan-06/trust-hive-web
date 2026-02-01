@@ -41,6 +41,17 @@ class UserStore {
   }
 
 
+  async UpdateBusiness(name: string, type: string): Promise<ApiResponse> {
+    const resp = await this._userService.UpdateBusiness(name, type) as ApiResponse;
+    return resp;
+  }
+
+  async ChangePassword(old_password: string, new_password: string): Promise<ApiResponse> {
+    const resp = await this._userService.ChangePassword(old_password, new_password) as ApiResponse;
+    return resp;
+  }
+
+
   logout() {
     Cookies.remove(CMI_TOKEN);
     this.setUser(undefined);; 

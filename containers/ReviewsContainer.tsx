@@ -16,7 +16,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
     stars.push(
       <Star
         key={i}
-        className={`w-3.5 h-3.5 transition-colors ${i < fullStars ? 'text-amber-400 fill-amber-400' : 'text-gray-300'}`}
+        className={`w-3.5 h-3.5 transition-colors ${i < fullStars ? 'text-secondary fill-secondary' : 'text-gray-300'}`}
       />
     );
   }
@@ -30,23 +30,33 @@ const ReviewCard: React.FC<{ review: IReview }> = ({ review }) => {
   );
 
   return (
-    <div className="p-4 rounded-xl bg-white shadow-sm hover:shadow-md transition">
+    <div className="
+      p-5 rounded-2xl 
+      bg-white/5 backdrop-blur-xl
+      border border-white/10
+      hover:border-primary/40
+      transition-all duration-300
+      hover:shadow-lg hover:shadow-primary/10
+    ">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="font-semibold text-gray-900 text-sm">
+          <h3 className="font-semibold text-white text-sm">
             {review.reviewer_name}
           </h3>
-          <span className="text-xs text-gray-400">{formattedDate}</span>
+          <span className="text-xs text-white/40">
+            {formattedDate}
+          </span>
         </div>
         <StarRating rating={review.rating} />
       </div>
 
-      <p className="text-gray-700 text-sm mt-3 leading-relaxed">
+      <p className="text-white/70 text-sm mt-4 leading-relaxed">
         {review.review_text}
       </p>
     </div>
   );
 };
+
 
 const Pagination: React.FC<{
   currentPage: number;
@@ -88,7 +98,10 @@ const Pagination: React.FC<{
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="p-2 border border-primary/10 rounded-lg text-primary hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300 shadow-sm"
+        className="p-2 rounded-lg 
+bg-white/5 border border-white/10 
+hover:bg-primary/20 hover:border-primary/40 
+disabled:opacity-30 transition"
         aria-label="Previous Page"
       >
         <ChevronLeft className="w-4 h-4" />
@@ -100,9 +113,9 @@ const Pagination: React.FC<{
             <button
               key={page}
               onClick={() => onPageChange(page)}
-              className={`px-3 py-1.5 cursor-pointer rounded-lg text-sm font-semibold transition duration-300 shadow-sm ${page === currentPage
-                  ? 'bg-primary text-white shadow-primary/50'
-                  : 'text-gray-700 hover:bg-primary/10 hover:text-primary bg-white border border-gray-200'
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${page === currentPage
+                ? "bg-primary text-white shadow-lg shadow-primary/40"
+                : "bg-white/5 border border-white/10 text-white/70 hover:bg-primary/10"
                 }`}
             >
               {page}
@@ -118,7 +131,10 @@ const Pagination: React.FC<{
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="p-2 border border-primary/20 rounded-lg text-primary hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed transition duration-300 shadow-sm"
+        className="p-2 rounded-lg 
+bg-white/5 border border-white/10 
+hover:bg-primary/20 hover:border-primary/40 
+disabled:opacity-30 transition"
         aria-label="Next Page"
       >
         <ChevronRight className="w-4 h-4" />
@@ -182,59 +198,91 @@ const ReviewsContainer = () => {
 
   if (isLoading && totalReviewsCount === 0) {
     const ShimmerCards = [...Array(REVIEWS_PER_PAGE)].map((_, i) => (
-      <div key={i} className="bg-white p-5 rounded-xl shadow-md border border-gray-100 animate-pulse h-40">
-        <div className="flex justify-between mb-3">
-          <div className="h-5 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-3 bg-gray-200 rounded w-12"></div>
+      <div
+        key={i}
+        className="
+        p-5 rounded-2xl
+        bg-white/5 backdrop-blur-xl
+        border border-white/10
+        animate-pulse
+        h-40
+      "
+      >
+        <div className="flex justify-between mb-4">
+          <div className="h-4 bg-white/10 rounded w-1/4"></div>
+          <div className="h-4 bg-primary/20 rounded w-16"></div>
         </div>
-        <div className="h-3 bg-gray-200 rounded w-3/4 mb-3"></div>
-        <div className="h-3 bg-gray-100 rounded w-full mb-1"></div>
-        <div className="h-3 bg-gray-100 rounded w-5/6"></div>
+
+        <div className="h-3 bg-white/10 rounded w-3/4 mb-3"></div>
+        <div className="h-3 bg-white/10 rounded w-full mb-2"></div>
+        <div className="h-3 bg-white/10 rounded w-5/6"></div>
       </div>
     ));
 
     return (
-      <div className="p-4 sm:p-8 lg:p-12 min-h-screen bg-linear-to-br from-primary/10 to-white">
-        <header className="mb-8 text-center">
-          <div className="h-4 bg-primary/20 rounded w-1/3 mx-auto mb-2 animate-pulse"></div>
-          <div className="h-8 bg-gray-300 rounded w-1/2 mx-auto mt-2 animate-pulse"></div>
-          <div className="w-12 h-1 bg-primary/30 mx-auto mt-3 rounded-full animate-pulse"></div>
+      <div className="min-h-screen p-8 
+      bg-linear-to-br from-black via-[#0f0f0f] to-black 
+      text-white"
+      >
+        <header className="mb-8">
+          <div className="h-6 bg-white/10 rounded w-40 mb-3 animate-pulse"></div>
+          <div className="h-4 bg-white/10 rounded w-56 animate-pulse"></div>
+          <div className="w-16 h-[3px] mt-4 rounded-full bg-primary/30 animate-pulse"></div>
         </header>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {ShimmerCards}
         </div>
-        <div className="flex justify-center items-center mt-8">
-          <div className="h-8 w-40 bg-gray-200 rounded-lg animate-pulse"></div>
+
+        <div className="flex justify-center mt-8">
+          <div className="h-8 w-40 bg-white/10 rounded-lg animate-pulse"></div>
         </div>
       </div>
     );
   }
 
+
   if (totalReviewsCount === 0 && !isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center p-12 bg-white rounded-xl shadow-lg border border-gray-100 m-8">
-        <MessageSquare className="w-12 h-12 text-primary/40 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Be the first to leave a review!</h2>
-        <p className="text-gray-500">No reviews found for this business yet.</p>
+      <div className="flex flex-col justify-center items-center 
+    min-h-[60vh] text-center">
+
+        <div className="w-16 h-16 rounded-full 
+      bg-primary/20 flex items-center justify-center 
+      mb-5">
+          <MessageSquare className="w-8 h-8 text-primary" />
+        </div>
+
+        <h2 className="text-2xl font-semibold mb-2">
+          No reviews yet
+        </h2>
+
+        <p className="text-white/50 text-sm">
+          Once customers leave reviews, they will appear here.
+        </p>
       </div>
     );
+
   }
 
   const isFetchingNextPage = isLoading && totalReviewsCount > 0;
 
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen p-8 
+    bg-linear-to-br from-black via-[#0f0f0f] to-black 
+    text-white">
       <div className="">
 
         {/* Header */}
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
-            Reviews ({totalReviewsCount})
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Reviews
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            What customers are saying
+          <p className="text-white/50 text-sm mt-1">
+            {totalReviewsCount} customer reviews
           </p>
+          <div className="w-16 h-[3px] mt-3 rounded-full bg-linear-to-r from-primary to-transparent" />
         </header>
 
         {/* Reviews Grid */}
@@ -242,7 +290,8 @@ const ReviewsContainer = () => {
           className={`transition-opacity duration-200 ${isFetchingNextPage ? "opacity-50 pointer-events-none" : ""
             }`}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
             {displayedReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}

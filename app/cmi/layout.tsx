@@ -1,7 +1,7 @@
 "use client"
 import Sidebar from "@/components/Sidebar";
 import { LayoutDashboard, Settings, Share, Share2, Star } from "lucide-react";
-import logo from "@/public/logo.svg"
+import logo from "@/public/assets/logo.svg"
 import { usePathname } from "next/navigation";
 import userStore from "@/stores/UserStore";
 
@@ -18,7 +18,7 @@ export default function CmdLayout({ children }: { children: React.ReactNode }) {
           <Sidebar
             name="Trust Hive"
             businessName={userStore.user?.business.name}
-            // logo={logo.src}
+            logo={logo.src}
             links={[
               {
                 icon: <LayoutDashboard />,
