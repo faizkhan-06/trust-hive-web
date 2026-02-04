@@ -58,7 +58,7 @@ const Sidebar: React.FC<ISidebarProps> = ({ logo, name, links, businessName }) =
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-[#7c3aed]/30 rounded-full blur-3xl opacity-40" />
 
         {/* Header */}
-    <div className="flex justify-center items-center pt-4">
+    <div className="flex justify-center items-center pt-8">
       {logo && (
         <img
           src={logo}

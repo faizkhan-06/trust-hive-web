@@ -44,7 +44,7 @@ export default function CmdLayout({ children }: { children: React.ReactNode }) {
           />
         )
       }
-      <main className={`  min-h-screen w-full font-inter ${pathSegment !== "register" && pathSegment !== "login" && "lg:flex-1 lg:ml-64 lg:p-4"}`}>{children}</main>
+      <main className={`  min-h-screen w-full font-inter bg-black ${pathSegment !== "register" && pathSegment !== "login" && "lg:flex-1 lg:ml-64 lg:p-4"}`}>{children}</main>
     </div>
   );
 }

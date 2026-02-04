@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Black_Han_Sans, Geist, Geist_Mono, Inter } from "next/font/google";
+import { Black_Han_Sans, Geist, Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import Navbar from "@/components/common/Navbar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,6 +15,12 @@ const blackHanSans = Black_Han_Sans({
   variable: "--font-black-han-sans",
   weight: ["400"]
 })
+
+const SpaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "600", "700"]
+}) 
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${blackHanSans.variable} antialiased`}
+        className={`${inter.variable} ${blackHanSans.variable} ${SpaceGrotesk.variable} antialiased`}
       >
         {children}
 

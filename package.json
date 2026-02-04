@@ -11,6 +11,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.2",
+    "framer-motion": "^12.31.0",
     "html-to-image": "^1.11.13",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.554.0",
